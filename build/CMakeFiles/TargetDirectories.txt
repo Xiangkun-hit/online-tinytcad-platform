@@ -1,0 +1,3 @@
+/home/ubuntu/Desktop/online-tinytcad-platform/build/CMakeFiles/rebuild_cache.dir
+/home/ubuntu/Desktop/online-tinytcad-platform/build/CMakeFiles/edit_cache.dir
+/home/ubuntu/Desktop/online-tinytcad-platform/build/CMakeFiles/online_platform.dir

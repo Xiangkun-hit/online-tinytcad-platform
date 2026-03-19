@@ -1,0 +1,1 @@
+/usr/bin/c++ -fPIC  -O2 -Wall -Wextra -O3 -DNDEBUG  -shared  -o tinytcad_py.cpython-38-x86_64-linux-gnu.so CMakeFiles/tinytcad_py.dir/python_bind.cpp.o  -flto ../src/mesh/libmesh.a ../src/solver/libsolver.a ../src/utils/libutils.a ../src/io/libio.a 
