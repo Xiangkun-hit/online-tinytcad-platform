@@ -7,6 +7,8 @@
 #include <cerrno>
 #include <unistd.h>
 using namespace std;
+#include "mesh.h"
+#include "solver.h"
 
 // ===================== 工具函数：根据文件后缀返回Content-Type =====================
 static const char* get_content_type(const char* file_name) {
@@ -423,4 +425,16 @@ void handle_client(ClientContext* ctx)
             return;
         }
     }
+    // ===================== 新增：调用tinytcad数值仿真 =====================
+    // 1. 创建网格（50个节点，区间0~1）
+    Mesh1D mesh(50, 0.0, 1.0);
+    // 2. 创建求解器
+    Solver solver;
+    // 3. 选择模型：泊松方程（你也可以换线性/二次）
+    solver.set_possion_model();
+    // 4. 执行仿真计算
+    solver.solve(mesh.get_x_coords(), mesh.get_node_num());
+    // 5. 输出结果到文件
+    solver.print_result();
+    // ====================================================================
 }

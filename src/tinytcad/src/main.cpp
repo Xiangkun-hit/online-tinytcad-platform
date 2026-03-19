@@ -15,7 +15,7 @@ void show_usage(){
   std::cout << "======================================" << std::endl;
 }
 
-int main(int argc, char* argv[]) {  //支持命令行参数
+int test_tinytcad(int argc, char* argv[]) {  //支持命令行参数
   //========== 1.工具Utils初始化 ======
   Utils utils;
   utils.init();

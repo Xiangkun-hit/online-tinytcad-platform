@@ -6,5 +6,5 @@ CXX_FLAGS =   -std=gnu++11
 
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/home/ubuntu/Desktop/online-tinytcad-platform/src/webserver -I/home/ubuntu/Desktop/online-tinytcad-platform/src/tinytcad 
+CXX_INCLUDES = -I/home/ubuntu/Desktop/online-tinytcad-platform/src/webserver -I/home/ubuntu/Desktop/online-tinytcad-platform/src/tinytcad -I/home/ubuntu/Desktop/online-tinytcad-platform/src/tinytcad/src/mesh -I/home/ubuntu/Desktop/online-tinytcad-platform/src/tinytcad/src/solver 
 

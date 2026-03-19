@@ -7,11 +7,12 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # 包含头文件路径
 include_directories(src/webserver)
 include_directories(src/tinytcad)
+include_directories(src/tinytcad/src/mesh)
+include_directories(src/tinytcad/src/solver)
 
-# 编译WebServer模块
-aux_source_directory(src/webserver WEB_SRC)
-# 编译仿真核心模块
-aux_source_directory(src/tinytcad TINYTCAD_SRC)
+# 自动搜集所有源码
+file(GLOB WEB_SRC src/webserver/*.cpp src/webserver/*.h)
+file(GLOB TINYTCAD_SRC src/tinytcad/*.cpp src/tinytcad/*.h)
 
 # 生成最终可执行文件
 add_executable(online_platform ${WEB_SRC} ${TINYTCAD_SRC})

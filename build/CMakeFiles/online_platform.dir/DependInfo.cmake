@@ -17,6 +17,8 @@ set(CMAKE_CXX_COMPILER_ID "GNU")
 set(CMAKE_CXX_TARGET_INCLUDE_PATH
   "../src/webserver"
   "../src/tinytcad"
+  "../src/tinytcad/src/mesh"
+  "../src/tinytcad/src/solver"
   )
 
 # Targets to which this target links.

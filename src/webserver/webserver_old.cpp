@@ -36,7 +36,7 @@ void log_request(const char* method, const char* path)
     printf("[%s] %s 请求 | 路径：%s\n", time_str, method, path);
 }
 
-int main() {
+int webserver_old() {
     // 1. 创建 socket
     int server_fd = socket(AF_INET, SOCK_STREAM, 0);
     if (server_fd == -1) {
