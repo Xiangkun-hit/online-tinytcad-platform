@@ -1,0 +1,1 @@
+/usr/bin/c++     CMakeFiles/web_tinytcad_service.dir/src/webserver/main.cpp.o CMakeFiles/web_tinytcad_service.dir/src/webserver/server.cpp.o  -o web_tinytcad_service  -lpthread 
