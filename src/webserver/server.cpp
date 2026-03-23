@@ -3,10 +3,13 @@
 #include <sys/stat.h>
 #include <signal.h>
 
+
+
 bool g_server_running = true;     // 全局变量，控制服务器退出
 void stopServer(int sig){
     g_server_running = false;
     std::cout << "\n服务器正在安全关闭..." << std::endl;
+    // 忽略SIGPIPE信号，防止向已关闭的socket发送数据时程序崩溃
 }
 
 
@@ -65,6 +68,7 @@ bool Server::init(){
 // 启动服务器，接收连接
 void Server::run(){
     signal(SIGINT, stopServer);      // 注册信号：Ctrl+C 关闭服务器
+    signal(SIGPIPE, SIG_IGN);
 
     std::cout << "服务器启动成功，等待客户端连接..." << std::endl;
 
@@ -102,7 +106,8 @@ void Server::run(){
              // 情况2：客户端fd触发 → 有数据可读
             else{
                 std::cout << "客户端fd " << curr_fd << " 发送数据" << std::endl;
-                m_thread_pool->addTask(Server::handleClient, curr_fd);  //处理客户端数据
+                // m_thread_pool->addTask(Server::handleClient, curr_fd);  //处理客户端数据
+                Server::handleClient(curr_fd);
             }
         }
     }
@@ -163,8 +168,29 @@ const char* getContentType(const char* path){
     return "text/plain";
 }
 
+bool saveTclFile(const char* content){
+    int fd = open("../src/tinytcad/input/simulation.tcl", O_WRONLY | O_CREAT | O_TRUNC, 0644);
+    if(fd < 0) return false;
+
+    write(fd, content, strlen(content));
+    close(fd);
+    return true;
+}
+
+void parseTclParams(const char* content, char* temp, char* dose, char* time){
+    strcpy(temp, "unknown");
+    strcpy(dose, "unknown");
+    strcpy(time, "unknown");
+
+    char t[32], d[32], ti[32];
+    if (sscanf(content, "set temperature %s", t) == 1) strcpy(temp, t);
+    if (sscanf(content, "set dose %s", d) == 1) strcpy(dose, d);
+    if (sscanf(content, "set time %s", ti) == 1) strcpy(time, ti);
+}
+
 // 静态业务处理函数（无对象依赖，线程池安全调用）
 void Server::handleClient(int clientfd){
+    signal(SIGPIPE, SIG_IGN);
     char buffer[1024] = {0};       //存放从客户端读取的数据
     int readn = recv(clientfd, buffer, sizeof(buffer)-1,0);                     //每次调用recv()的返回值
         
@@ -197,15 +223,14 @@ void Server::handleClient(int clientfd){
         close(clientfd);
         return;
     }
-    if (strcmp(path, "/upload") == 0) {
-        // 简化版文件接收（专为 TCL 仿真脚本设计）
-        const char* success_page = 
+    if (strcmp(path, "/upload") == 0 && strcmp(method, "POST") == 0) {
+        const char* resp = 
             "HTTP/1.1 200 OK\r\n"
-            "Content-Type: text/html\r\n\r\n"
-            "<h1>✅ TCL 仿真脚本上传成功！</h1>"
-            "<p>文件已保存至服务器：/tcad/input/</p>"
-            "<p><a href=\"/\">继续上传</a></p>";
-        send(clientfd, success_page, strlen(success_page), 0);
+            "Content-Type: text/html; charset=utf-8\r\n\r\n"
+            "<h1>✅ TCL脚本上传成功！</h1>"
+            "<p>文件已保存至服务器</p>"
+            "<p><a href='/'>继续上传</a></p>";
+        send(clientfd, resp, strlen(resp), 0);
         close(clientfd);
         return;
     }
