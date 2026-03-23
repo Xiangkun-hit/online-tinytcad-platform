@@ -64,17 +64,17 @@ HTTP_CODE parse_content(char* buffer, int& checked_idx, int read_idx, HttpReques
 
 // 主状态机--------状态机主函数
 HTTP_CODE http_parse(char* buffer, int read_idx, HttpRequest& req){
-    if(read_idx <= 0) return HTTP_CODE::NO_REQUEST;
+    if(read_idx <= 0) return HTTP_CODE::NO_REQUEST;  //基础校验
 
-    CHECK_STATE state = CHECK_STATE::CHECK_STATE_REQUEST_LINE;
-    LINE_STATUS line_status = LINE_STATUS::LINE_OK;
-    HTTP_CODE ret = HTTP_CODE::NO_REQUEST;
-    int checked_idx = 0;
+    CHECK_STATE state = CHECK_STATE::CHECK_STATE_REQUEST_LINE;   //初始化核心变量 解析请求行
+    LINE_STATUS line_status = LINE_STATUS::LINE_OK;              //行状态初始为完整
+    HTTP_CODE ret = HTTP_CODE::NO_REQUEST;                       //解析结果
+    int checked_idx = 0;                                         //已经解析到的缓冲区位置
 
     while((line_status = parse_line(buffer, checked_idx, read_idx)) == LINE_STATUS::LINE_OK){
-        char* line = buffer + checked_idx;
+        char* line = buffer + checked_idx;              // 拿到当前完整的一行
 
-        switch(state){
+        switch(state){                      // 按当前状态处理这一行
             case CHECK_STATE::CHECK_STATE_REQUEST_LINE:
                 ret = parse_request_line(line, state, req);
                 break;
