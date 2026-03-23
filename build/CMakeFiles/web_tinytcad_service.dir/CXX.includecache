@@ -6,7 +6,29 @@
 
 #IncludeRegexTransform: 
 
-/home/ubuntu/Desktop/online-tinytcad-platform/src/webserver/threadpool.cpp
+/home/ubuntu/Desktop/online-tinytcad-platform/src/webserver/server.cpp
+server.h
+/home/ubuntu/Desktop/online-tinytcad-platform/src/webserver/server.h
+cstring
+-
+sys/stat.h
+-
+
+/home/ubuntu/Desktop/online-tinytcad-platform/src/webserver/server.h
+iostream
+-
+sys/socket.h
+-
+netinet/in.h
+-
+unistd.h
+-
+sys/epoll.h
+-
+fcntl.h
+-
+memory
+-
 threadpool.h
 /home/ubuntu/Desktop/online-tinytcad-platform/src/webserver/threadpool.h
 

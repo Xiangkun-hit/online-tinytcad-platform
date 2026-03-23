@@ -1,5 +1,7 @@
 #include "server.h"
 #include <cstring>
+#include <sys/stat.h>
+
 
 // 构造函数：指定端口
 Server::Server(int port) : m_port(port), m_listenfd(-1), m_epollfd(-1){
@@ -93,11 +95,8 @@ void Server::run(){
                 std::cout << "客户端fd " << curr_fd << " 发送数据" << std::endl;
                 m_thread_pool->addTask(Server::handleClient, curr_fd);  //处理客户端数据
             }
-
         }
-
     }
-
 }
 
 //epoll init
@@ -141,6 +140,14 @@ bool Server::addFdToEpoll(int fd){
     return true;
 }
 
+const char* getContentType(const char* path){
+    if(strstr(path, ".html")) return "text/html";
+    if (strstr(path, ".jpg"))  return "image/jpeg";
+    if (strstr(path, ".png"))  return "image/png";
+    if (strstr(path, ".css"))  return "text/css";
+    return "text/plain";
+}
+
 // 静态业务处理函数（无对象依赖，线程池安全调用）
 void Server::handleClient(int clientfd){
     char buffer[1024] = {0};       //存放从客户端读取的数据
@@ -155,14 +162,40 @@ void Server::handleClient(int clientfd){
     char path[256] = {0};   // 请求路径 / /index /404
     sscanf(buffer, "%s %s", method, path);  //格式化读取请求行
 
-    char response[1024] = {0};
-    if(strcmp(path, "/") == 0){
-        // 首页：返回HTML页面
-        strcpy(response, "HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n<h1>Hello WebServer</h1><p>Day4成功</p>");
+    char filePath[512] = "../www";
+    if(strcmp(path, "/") == 0 ){
+        strcat(filePath, "/index.html");
     }else{
-        // 404页面
-        strcpy(response, "HTTP/1.1 404 Not Found\r\nContent-Type: text/html\r\n\r\n<h1>404 Page Not Found</h1>");
+        strcat(filePath, path);
     }
+
+    struct stat fileStat;
+    if(stat(filePath, &fileStat) < 0){
+        // 文件不存在：返回404
+        char notFound[] = "HTTP/1.1 404 Not Found\r\nContent-Type: text/html\r\n\r\n<h1>noFile404 Not Found</h1>";
+        send(clientfd, notFound, sizeof(notFound), 0);
+        close(clientfd);
+        return;
+    }
+
+    int fd = open(filePath, O_RDONLY);
+    char fileBuffer[4096] = {0};
+    read(fd, fileBuffer, sizeof(fileBuffer)-1);
+    close(fd);
+
+    char response[8192] = {0};
+    
+    // 首页：返回HTML页面
+    sprintf(response, 
+        "HTTP/1.1 200 OK\r\n"
+        "Content-Type: %s\r\n"
+        "\r\n"
+        "%s",
+        getContentType(filePath),
+        fileBuffer
+    );
+    
+    
     send(clientfd, response, strlen(response), 0);    // 发送HTTP响应给浏览器
     close(clientfd);      // 短连接：发送完关闭（HTTP/1.1默认短连接）
     
