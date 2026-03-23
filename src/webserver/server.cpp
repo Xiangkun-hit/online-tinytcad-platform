@@ -1,4 +1,5 @@
 #include "server.h"
+#include <cstring>
 
 // 构造函数：指定端口
 Server::Server(int port) : m_port(port), m_listenfd(-1), m_epollfd(-1){
@@ -13,6 +14,10 @@ bool Server::init(){
         std::cerr << "socket 创建失败！" << std::endl;
         return false;
     }
+
+    // 端口复用
+    int reuse = 1;
+    setsockopt(m_listenfd, SOL_SOCKET, SO_REUSEADDR, &reuse, sizeof(reuse));
 
     // 2. 绑定端口和IP
     struct sockaddr_in address;
@@ -42,6 +47,8 @@ bool Server::init(){
     //将监听fd添加到epoll
     addFdToEpoll(m_listenfd);
 
+    m_thread_pool = std::make_unique<ThreadPool>();   // 初始化线程池（自动获取CPU核心数）
+
     std::cout << "服务器初始化成功！监听端口：" << m_port << std::endl;
     return true;
 }
@@ -64,19 +71,27 @@ void Server::run(){
 
             //情况1：监听fd触发 → 有新客户端连接
             if(curr_fd == m_listenfd){
-                struct sockaddr_in client;
-                socklen_t len = sizeof(client);
-                int clientfd = accept(m_listenfd, (sockaddr*)&client, &len);
-                if(clientfd == -1) continue;
+                while(true){
+                    struct sockaddr_in client;
+                    socklen_t len = sizeof(client);
+                    int clientfd = accept(m_listenfd, (sockaddr*)&client, &len);
+                    if(clientfd < 0){
+                        if(errno == EAGAIN || errno == EWOULDBLOCK){
+                            break;
+                        }
+                        std::cerr << "accept failed\n";
+                        break;
+                    } 
 
-                std::cout << "新客户端连接!fd:" << clientfd << std::endl;
-                addFdToEpoll(clientfd);   //将新连接的客户端也加入epoll监听
+                    std::cout << "新客户端连接!fd:" << clientfd << std::endl;
+                    addFdToEpoll(clientfd);   //将新连接的客户端也加入epoll监听
+                }
+                
             }
              // 情况2：客户端fd触发 → 有数据可读
             else{
                 std::cout << "客户端fd " << curr_fd << " 发送数据" << std::endl;
-                // 暂时关闭连接（下一步实现数据读取）
-                close(curr_fd);
+                m_thread_pool->addTask(Server::handleClient, curr_fd);  //处理客户端数据
             }
 
         }
@@ -97,15 +112,60 @@ bool Server::initEpoll(){
     return true;
 }
 
+
+static int setNonBlock(int fd){
+    int old_flag = fcntl(fd, F_GETFL, 0);
+    int new_flag = old_flag | O_NONBLOCK;
+    fcntl(fd, F_SETFL, new_flag);
+    return old_flag;
+}
+
+
 //封装「将fd添加到epoll」的工具函数
-void Server::addFdToEpoll(int fd){
+bool Server::addFdToEpoll(int fd){
     struct epoll_event ev;
-    ev.events = EPOLLIN;    // 监听 读事件
+    ev.events = EPOLLIN | EPOLLET;    // 监听 读事件 ET模式
     ev.data.fd = fd;        // 绑定文件描述符
 
-    // EPOLL_CTL_ADD：添加fd和socket到epoll句柄
-    epoll_ctl(m_epollfd, EPOLL_CTL_ADD, fd, &ev);
+    // if(oneshot){
+    //     ev.events |= EPOLLONESHOT;  //事件只触发一次
+    // }
+
+    // EPOLL_CTL_ADD：添加fd和event到epoll句柄
+    if(epoll_ctl(m_epollfd, EPOLL_CTL_ADD, fd, &ev) == -1){
+        std::cerr << "epoll_ctl add failed\n";
+        return false;
+    }
+
+    setNonBlock(fd);
+    return true;
 }
+
+// 静态业务处理函数（无对象依赖，线程池安全调用）
+void Server::handleClient(int clientfd){
+    char buffer[1024] = {0};       //存放从客户端读取的数据
+    int readn;                     //每次调用recv()的返回值
+    char* ptr = buffer;            //buff的位置指针
+    while(true){
+        if((readn = recv(clientfd, ptr, 5, 0)) <= 0){
+            if(readn < 0 && errno == EAGAIN){     ////如果数据被读取完了，发送内容
+                std::cout << "Client[" << clientfd << "]: " << buffer << std::endl;
+                const char* resp = "HTTP/1.1 200 OK\r\nContent-Length:13\r\n\r\nServer Received!";
+                send(clientfd, resp, strlen(resp), 0);
+            }
+            else{     //如果客户端连接已断开
+                // epoll_ctl(m_epollfd, EPOLL_CTL_DEL, clientfd, nullptr);
+                close(clientfd);
+                std::cout << "Client[" << clientfd << "] disconnected" << std::endl;
+            }
+            break;
+        }
+        else{
+            ptr = ptr + readn;     //buffer的位置指针后移
+        }        
+    }
+}
+
 
 // 析构函数：关闭套接字
 Server::~Server(){
