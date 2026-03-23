@@ -2,6 +2,7 @@
 #include <cstring>
 #include <sys/stat.h>
 #include <signal.h>
+#include "http_parser.h"
 
 
 
@@ -199,16 +200,20 @@ void Server::handleClient(int clientfd){
         return;
     }
 
-    char method[16] = {0};  // 请求方法 GET/POST
-    char path[256] = {0};   // 请求路径 / /index /404
-    sscanf(buffer, "%s %s", method, path);  //格式化读取请求行
+    //有限状态机解析HTTP请求
+    HttpRequest req;
+    HTTP_CODE code = http_parse(buffer, readn, req);
+
+    
+    // char method[16] = {0};  // 请求方法 GET/POST
+    // char path[256] = {0};   // 请求路径 / /index /404
+    // sscanf(buffer, "%s %s", method, path);  //格式化读取请求行
 
     //=======动态路由
-    char response[2048] = {0};
-    
-    if(strcmp(path, "/") == 0){
+    char response[8192] = {0};
+    if(code == HTTP_CODE::GET_REQUEST && req.url == "/"){
         // TCL 文件上传表单页面
-        const char* upload_page = 
+        snprintf(response, sizeof(response), 
             "HTTP/1.1 200 OK\r\n"
             "Content-Type: text/html; charset=utf-8\r\n"
             "\r\n"
@@ -218,18 +223,34 @@ void Server::handleClient(int clientfd){
             "<input type=\"file\" name=\"tcad_file\" accept=\".tcl\" required>"
             "<br><br>"
             "<button type=\"submit\">上传 TCAD 仿真文件</button>"
-            "</form>";
+            "</form>");
+    }
+    else if(code == HTTP_CODE::POST_REQUEST && req.url == "/upload"){
+        saveTclFile(req.body.c_str());
+        snprintf(response, sizeof(response),
+            "HTTP/1.1 200 OK\r\n"
+            "Content-Type: text/html; charset=utf-8\r\n\r\n"
+            "<h1>✅ TCL脚本上传成功!</h1>"
+            "<p>文件已保存至服务器</p>"
+            "<p><a href='/'>继续上传</a></p>");    
+    }
+    else{
+        snprintf(response, sizeof(response),
+            "HTTP/1.1 404 Not Found\r\nContent-Type: text/html; charset=utf-8\r\n\r\n"
+            "<h1>404 页面不存在</h1>");    
+    }
+    send(clientfd, response, strlen(response), 0);
+    close(clientfd);
+    
+    /* if(strcmp(path, "/") == 0){
+        
         send(clientfd, upload_page, strlen(upload_page), 0);
         close(clientfd);
         return;
     }
     if (strcmp(path, "/upload") == 0 && strcmp(method, "POST") == 0) {
         const char* resp = 
-            "HTTP/1.1 200 OK\r\n"
-            "Content-Type: text/html; charset=utf-8\r\n\r\n"
-            "<h1>✅ TCL脚本上传成功！</h1>"
-            "<p>文件已保存至服务器</p>"
-            "<p><a href='/'>继续上传</a></p>";
+            
         send(clientfd, resp, strlen(resp), 0);
         close(clientfd);
         return;
@@ -289,7 +310,7 @@ void Server::handleClient(int clientfd){
         "HTTP/1.1 404 Not Found\r\nContent-Type: text/html\r\n\r\n"
         "<h1>404 Not Found</h1>");
     send(clientfd, response, strlen(response), 0);
-    close(clientfd);   
+    close(clientfd);  */ 
 }
 
 

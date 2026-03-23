@@ -123,6 +123,33 @@ web_tinytcad_service/fast:
 	$(MAKE) -f CMakeFiles/web_tinytcad_service.dir/build.make CMakeFiles/web_tinytcad_service.dir/build
 .PHONY : web_tinytcad_service/fast
 
+src/webserver/http_parser.o: src/webserver/http_parser.cpp.o
+
+.PHONY : src/webserver/http_parser.o
+
+# target to build an object file
+src/webserver/http_parser.cpp.o:
+	$(MAKE) -f CMakeFiles/web_tinytcad_service.dir/build.make CMakeFiles/web_tinytcad_service.dir/src/webserver/http_parser.cpp.o
+.PHONY : src/webserver/http_parser.cpp.o
+
+src/webserver/http_parser.i: src/webserver/http_parser.cpp.i
+
+.PHONY : src/webserver/http_parser.i
+
+# target to preprocess a source file
+src/webserver/http_parser.cpp.i:
+	$(MAKE) -f CMakeFiles/web_tinytcad_service.dir/build.make CMakeFiles/web_tinytcad_service.dir/src/webserver/http_parser.cpp.i
+.PHONY : src/webserver/http_parser.cpp.i
+
+src/webserver/http_parser.s: src/webserver/http_parser.cpp.s
+
+.PHONY : src/webserver/http_parser.s
+
+# target to generate assembly for a file
+src/webserver/http_parser.cpp.s:
+	$(MAKE) -f CMakeFiles/web_tinytcad_service.dir/build.make CMakeFiles/web_tinytcad_service.dir/src/webserver/http_parser.cpp.s
+.PHONY : src/webserver/http_parser.cpp.s
+
 src/webserver/main.o: src/webserver/main.cpp.o
 
 .PHONY : src/webserver/main.o
@@ -213,6 +240,9 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
 	@echo "... web_tinytcad_service"
+	@echo "... src/webserver/http_parser.o"
+	@echo "... src/webserver/http_parser.i"
+	@echo "... src/webserver/http_parser.s"
 	@echo "... src/webserver/main.o"
 	@echo "... src/webserver/main.i"
 	@echo "... src/webserver/main.s"

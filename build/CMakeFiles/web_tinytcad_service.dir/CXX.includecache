@@ -6,6 +6,18 @@
 
 #IncludeRegexTransform: 
 
+/home/ubuntu/Desktop/online-tinytcad-platform/src/webserver/http_parser.cpp
+http_parser.h
+/home/ubuntu/Desktop/online-tinytcad-platform/src/webserver/http_parser.h
+cstring
+-
+cstdlib
+-
+
+/home/ubuntu/Desktop/online-tinytcad-platform/src/webserver/http_parser.h
+string
+-
+
 /home/ubuntu/Desktop/online-tinytcad-platform/src/webserver/server.cpp
 server.h
 /home/ubuntu/Desktop/online-tinytcad-platform/src/webserver/server.h
@@ -15,6 +27,8 @@ sys/stat.h
 -
 signal.h
 -
+http_parser.h
+/home/ubuntu/Desktop/online-tinytcad-platform/src/webserver/http_parser.h
 
 /home/ubuntu/Desktop/online-tinytcad-platform/src/webserver/server.h
 iostream
