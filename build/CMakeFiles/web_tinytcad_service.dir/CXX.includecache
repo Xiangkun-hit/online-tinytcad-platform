@@ -13,6 +13,8 @@ cstring
 -
 sys/stat.h
 -
+signal.h
+-
 
 /home/ubuntu/Desktop/online-tinytcad-platform/src/webserver/server.h
 iostream

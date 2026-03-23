@@ -1,6 +1,13 @@
 #include "server.h"
 #include <cstring>
 #include <sys/stat.h>
+#include <signal.h>
+
+bool g_server_running = true;     // 全局变量，控制服务器退出
+void stopServer(int sig){
+    g_server_running = false;
+    std::cout << "\n服务器正在安全关闭..." << std::endl;
+}
 
 
 // 构造函数：指定端口
@@ -57,9 +64,11 @@ bool Server::init(){
 
 // 启动服务器，接收连接
 void Server::run(){
+    signal(SIGINT, stopServer);      // 注册信号：Ctrl+C 关闭服务器
+
     std::cout << "服务器启动成功，等待客户端连接..." << std::endl;
 
-    while(true){
+    while(g_server_running){       // 用全局变量控制循环，支持优雅退出
         // 阻塞等待事件发生（超时-1表示永久阻塞）
         int event_count = epoll_wait(m_epollfd, m_events, MAX_EVENTS, -1);
         if(event_count == -1){
@@ -162,13 +171,34 @@ void Server::handleClient(int clientfd){
     char path[256] = {0};   // 请求路径 / /index /404
     sscanf(buffer, "%s %s", method, path);  //格式化读取请求行
 
-    char filePath[512] = "../www";
-    if(strcmp(path, "/") == 0 ){
-        strcat(filePath, "/index.html");
-    }else{
-        strcat(filePath, path);
+    //=======动态路由
+    char response[2048] = {0};
+    
+    if(strcmp(path, "/") == 0){
+        snprintf(response, sizeof(response), 
+            "HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n"
+            "<h1>Webserver(Dynamic+Static)</h1>"
+            "<a href='/test.html'>static HTML</a> | <a href='/api?name=test'>dynamic</a>");
+        send(clientfd, response, strlen(response), 0);
+        close(clientfd);
+        return;
+    }
+    if(strstr(path, "/api")){
+        //解析GET参数
+        char name[32] = "unknown";
+        sscanf(path, "/api?name=%s", name);
+        snprintf(response, sizeof(response),
+            "HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n"
+            "<p>dynamic: hello! %s</p>", name);
+        send(clientfd, response, strlen(response), 0);
+        close(clientfd);
+        return;    
     }
 
+    //=====静态文件
+    char filePath[512] = "../www";
+    strcat(filePath, path);
+    
     struct stat fileStat;
     if(stat(filePath, &fileStat) < 0){
         // 文件不存在：返回404
@@ -180,29 +210,35 @@ void Server::handleClient(int clientfd){
         close(clientfd);
         return;
     }
+    if(stat(filePath, &fileStat) == 0){
+        int fd = open(filePath, O_RDONLY);
 
-    int fd = open(filePath, O_RDONLY);
+        char header[1024] = {0};
+        // snprintf：安全函数，指定缓冲区大小，永不溢出
+        snprintf(header, sizeof(header),
+            "HTTP/1.1 200 OK\r\n"
+            "Content-Type: %s\r\n"
+            "Content-Length: %ld\r\n"
+            "\r\n",
+            getContentType(filePath),
+            fileStat.st_size    // 文件真实大小
+        );
+        send(clientfd, header, strlen(header), 0);    //  先发送响应头
 
-    char header[1024] = {0};
-    // snprintf：安全函数，指定缓冲区大小，永不溢出
-    snprintf(header, sizeof(header),
-        "HTTP/1.1 200 OK\r\n"
-        "Content-Type: %s\r\n"
-        "Content-Length: %ld\r\n"
-        "\r\n",
-        getContentType(filePath),
-        fileStat.st_size    // 文件真实大小
-    );
-    send(clientfd, header, strlen(header), 0);    //  先发送响应头
-
-    char fileBuffer[4096] = {0};
-    ssize_t len;
-    while((len = read(fd, fileBuffer, sizeof(fileBuffer))) > 0){
-        send(clientfd, fileBuffer, len, 0);
-    }                     // 循环读取文件 → 循环发送，支持任意大小文件
-    close(fd);
-    close(clientfd);      // 短连接：发送完关闭（HTTP/1.1默认短连接）
-    
+        char fileBuffer[4096] = {0};
+        ssize_t len;
+        while((len = read(fd, fileBuffer, sizeof(fileBuffer))) > 0){
+            send(clientfd, fileBuffer, len, 0);
+        }                     // 循环读取文件 → 循环发送，支持任意大小文件
+        close(fd);
+        close(clientfd);      // 短连接：发送完关闭（HTTP/1.1默认短连接）
+        return;
+    }
+    snprintf(response, sizeof(response),
+        "HTTP/1.1 404 Not Found\r\nContent-Type: text/html\r\n\r\n"
+        "<h1>404 Not Found</h1>");
+    send(clientfd, response, strlen(response), 0);
+    close(clientfd);   
 }
 
 
