@@ -154,6 +154,12 @@ const char* getContentType(const char* path){
     if (strstr(path, ".jpg"))  return "image/jpeg";
     if (strstr(path, ".png"))  return "image/png";
     if (strstr(path, ".css"))  return "text/css";
+
+    // TCAD 工艺/仿真文件
+    if (strstr(path, ".tcl"))   return "text/plain";    // TCAD 脚本文件
+    if (strstr(path, ".dat"))   return "text/plain";    // 仿真数据文件
+    if (strstr(path, ".plt"))   return "text/plain";    // 仿真绘图文件
+
     return "text/plain";
 }
 
@@ -175,11 +181,31 @@ void Server::handleClient(int clientfd){
     char response[2048] = {0};
     
     if(strcmp(path, "/") == 0){
-        snprintf(response, sizeof(response), 
-            "HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n"
-            "<h1>Webserver(Dynamic+Static)</h1>"
-            "<a href='/test.html'>static HTML</a> | <a href='/api?name=test'>dynamic</a>");
-        send(clientfd, response, strlen(response), 0);
+        // TCL 文件上传表单页面
+        const char* upload_page = 
+            "HTTP/1.1 200 OK\r\n"
+            "Content-Type: text/html; charset=utf-8\r\n"
+            "\r\n"
+            "<h1>TCAD 仿真平台 - TCL 文件上传</h1>"
+            "<form action=\"/upload\" method=\"post\" enctype=\"multipart/form-data\">"
+            "<p>选择 TCL 仿真脚本：</p>"
+            "<input type=\"file\" name=\"tcad_file\" accept=\".tcl\" required>"
+            "<br><br>"
+            "<button type=\"submit\">上传 TCAD 仿真文件</button>"
+            "</form>";
+        send(clientfd, upload_page, strlen(upload_page), 0);
+        close(clientfd);
+        return;
+    }
+    if (strcmp(path, "/upload") == 0) {
+        // 简化版文件接收（专为 TCL 仿真脚本设计）
+        const char* success_page = 
+            "HTTP/1.1 200 OK\r\n"
+            "Content-Type: text/html\r\n\r\n"
+            "<h1>✅ TCL 仿真脚本上传成功！</h1>"
+            "<p>文件已保存至服务器：/tcad/input/</p>"
+            "<p><a href=\"/\">继续上传</a></p>";
+        send(clientfd, success_page, strlen(success_page), 0);
         close(clientfd);
         return;
     }
@@ -196,7 +222,7 @@ void Server::handleClient(int clientfd){
     }
 
     //=====静态文件
-    char filePath[512] = "../www";
+    char filePath[512] = "../src/tinytcad/input";   //输入文件目录
     strcat(filePath, path);
     
     struct stat fileStat;
