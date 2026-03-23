@@ -40,7 +40,7 @@ public:
     
 private: //工具函数 
     bool initEpoll();   //epoll init
-    bool addFdToEpoll(int fd, bool oneshot = true);   //封装「将fd添加到epoll」的工具函数
+    bool addFdToEpoll(int fd);   //封装「将fd添加到epoll」的工具函数
     static void handleClient(int clientfd);  //处理客户端数据的函数
        
 };

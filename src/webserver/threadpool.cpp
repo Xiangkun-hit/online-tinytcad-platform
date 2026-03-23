@@ -41,17 +41,17 @@ void ThreadPool::worker(){
 } 
 
 
-// 添加任务到线程池 生产者（核心接口）
-template<class F, class... Args>
-void ThreadPool::addTask(F&& f, Args&&... args) {
-    std::function<void()> task =
-        std::bind(std::forward<F>(f),std::forward<Args>(args)...);
-    {
-        std::unique_lock<std::mutex> lock(m_mutex);
-        m_task_queue.emplace(std::move(task));
-    }
-    m_cond.notify_one(); // 唤醒一个等待的线程
-} 
+// // 添加任务到线程池 生产者（核心接口）
+// template<class F, class... Args>
+// void ThreadPool::addTask(F&& f, Args&&... args) {
+//     std::function<void()> task =
+//         std::bind(std::forward<F>(f),std::forward<Args>(args)...);
+//     {
+//         std::unique_lock<std::mutex> lock(m_mutex);
+//         m_task_queue.emplace(std::move(task));
+//     }
+//     m_cond.notify_one(); // 唤醒一个等待的线程
+// } 
 
 
 // 析构函数：回收线程

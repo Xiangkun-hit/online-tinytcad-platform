@@ -15,8 +15,17 @@ public:
     ThreadPool(int thread_num);  // 构造函数：指定线程数量
     ~ThreadPool(); // 析构函数：回收线程
 
+    // 添加任务到线程池 生产者（核心接口）
     template<class F, class... Args>
-    void addTask(F&& f, Args&&... args);   // 添加任务到线程池 生产者（核心接口）
+    void addTask(F&& f, Args&&... args) {
+        std::function<void()> task =
+            std::bind(std::forward<F>(f),std::forward<Args>(args)...);
+        {
+            std::unique_lock<std::mutex> lock(m_mutex);
+            m_task_queue.emplace(std::move(task));
+        }
+        m_cond.notify_one(); // 唤醒一个等待的线程
+    }
     
     // void addTask(std::function<void()> task);  
 

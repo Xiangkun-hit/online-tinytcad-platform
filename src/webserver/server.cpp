@@ -47,7 +47,7 @@ bool Server::init(){
     //将监听fd添加到epoll
     addFdToEpoll(m_listenfd);
 
-    m_thread_pool = std::make_unique<ThreadPool>();   // 初始化线程池（自动获取CPU核心数）
+    m_thread_pool = std::make_unique<ThreadPool>(std::thread::hardware_concurrency());   // 初始化线程池（自动获取CPU核心数）
 
     std::cout << "服务器初始化成功！监听端口：" << m_port << std::endl;
     return true;
@@ -144,26 +144,28 @@ bool Server::addFdToEpoll(int fd){
 // 静态业务处理函数（无对象依赖，线程池安全调用）
 void Server::handleClient(int clientfd){
     char buffer[1024] = {0};       //存放从客户端读取的数据
-    int readn;                     //每次调用recv()的返回值
-    char* ptr = buffer;            //buff的位置指针
-    while(true){
-        if((readn = recv(clientfd, ptr, 5, 0)) <= 0){
-            if(readn < 0 && errno == EAGAIN){     ////如果数据被读取完了，发送内容
-                std::cout << "Client[" << clientfd << "]: " << buffer << std::endl;
-                const char* resp = "HTTP/1.1 200 OK\r\nContent-Length:13\r\n\r\nServer Received!";
-                send(clientfd, resp, strlen(resp), 0);
-            }
-            else{     //如果客户端连接已断开
-                // epoll_ctl(m_epollfd, EPOLL_CTL_DEL, clientfd, nullptr);
-                close(clientfd);
-                std::cout << "Client[" << clientfd << "] disconnected" << std::endl;
-            }
-            break;
-        }
-        else{
-            ptr = ptr + readn;     //buffer的位置指针后移
-        }        
+    int readn = recv(clientfd, buffer, sizeof(buffer)-1,0);                     //每次调用recv()的返回值
+        
+    if(readn <= 0){
+        close(clientfd);
+        return;
     }
+
+    char method[16] = {0};  // 请求方法 GET/POST
+    char path[256] = {0};   // 请求路径 / /index /404
+    sscanf(buffer, "%s %s", method, path);  //格式化读取请求行
+
+    char response[1024] = {0};
+    if(strcmp(path, "/") == 0){
+        // 首页：返回HTML页面
+        strcpy(response, "HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n<h1>Hello WebServer</h1><p>Day4成功</p>");
+    }else{
+        // 404页面
+        strcpy(response, "HTTP/1.1 404 Not Found\r\nContent-Type: text/html\r\n\r\n<h1>404 Page Not Found</h1>");
+    }
+    send(clientfd, response, strlen(response), 0);    // 发送HTTP响应给浏览器
+    close(clientfd);      // 短连接：发送完关闭（HTTP/1.1默认短连接）
+    
 }
 
 

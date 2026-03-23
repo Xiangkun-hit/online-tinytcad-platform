@@ -3,9 +3,11 @@
 
 CMakeFiles/web_tinytcad_service.dir/src/webserver/main.cpp.o: ../src/webserver/main.cpp
 CMakeFiles/web_tinytcad_service.dir/src/webserver/main.cpp.o: ../src/webserver/server.h
+CMakeFiles/web_tinytcad_service.dir/src/webserver/main.cpp.o: ../src/webserver/threadpool.h
 
 CMakeFiles/web_tinytcad_service.dir/src/webserver/server.cpp.o: ../src/webserver/server.cpp
 CMakeFiles/web_tinytcad_service.dir/src/webserver/server.cpp.o: ../src/webserver/server.h
+CMakeFiles/web_tinytcad_service.dir/src/webserver/server.cpp.o: ../src/webserver/threadpool.h
 
 CMakeFiles/web_tinytcad_service.dir/src/webserver/threadpool.cpp.o: ../src/webserver/threadpool.cpp
 CMakeFiles/web_tinytcad_service.dir/src/webserver/threadpool.cpp.o: ../src/webserver/threadpool.h
