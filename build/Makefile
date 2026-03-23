@@ -177,6 +177,33 @@ src/webserver/server.cpp.s:
 	$(MAKE) -f CMakeFiles/web_tinytcad_service.dir/build.make CMakeFiles/web_tinytcad_service.dir/src/webserver/server.cpp.s
 .PHONY : src/webserver/server.cpp.s
 
+src/webserver/threadpool.o: src/webserver/threadpool.cpp.o
+
+.PHONY : src/webserver/threadpool.o
+
+# target to build an object file
+src/webserver/threadpool.cpp.o:
+	$(MAKE) -f CMakeFiles/web_tinytcad_service.dir/build.make CMakeFiles/web_tinytcad_service.dir/src/webserver/threadpool.cpp.o
+.PHONY : src/webserver/threadpool.cpp.o
+
+src/webserver/threadpool.i: src/webserver/threadpool.cpp.i
+
+.PHONY : src/webserver/threadpool.i
+
+# target to preprocess a source file
+src/webserver/threadpool.cpp.i:
+	$(MAKE) -f CMakeFiles/web_tinytcad_service.dir/build.make CMakeFiles/web_tinytcad_service.dir/src/webserver/threadpool.cpp.i
+.PHONY : src/webserver/threadpool.cpp.i
+
+src/webserver/threadpool.s: src/webserver/threadpool.cpp.s
+
+.PHONY : src/webserver/threadpool.s
+
+# target to generate assembly for a file
+src/webserver/threadpool.cpp.s:
+	$(MAKE) -f CMakeFiles/web_tinytcad_service.dir/build.make CMakeFiles/web_tinytcad_service.dir/src/webserver/threadpool.cpp.s
+.PHONY : src/webserver/threadpool.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -192,6 +219,9 @@ help:
 	@echo "... src/webserver/server.o"
 	@echo "... src/webserver/server.i"
 	@echo "... src/webserver/server.s"
+	@echo "... src/webserver/threadpool.o"
+	@echo "... src/webserver/threadpool.i"
+	@echo "... src/webserver/threadpool.s"
 .PHONY : help
 
 
