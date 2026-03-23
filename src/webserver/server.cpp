@@ -172,31 +172,35 @@ void Server::handleClient(int clientfd){
     struct stat fileStat;
     if(stat(filePath, &fileStat) < 0){
         // 文件不存在：返回404
-        char notFound[] = "HTTP/1.1 404 Not Found\r\nContent-Type: text/html\r\n\r\n<h1>noFile404 Not Found</h1>";
+        char notFound[] = "HTTP/1.1 404 Not Found\r\n"
+                          "Content-Type: text/html\r\n"
+                          "\r\n"
+                          "<h1>noFile404 Not Found</h1>";
         send(clientfd, notFound, sizeof(notFound), 0);
         close(clientfd);
         return;
     }
 
     int fd = open(filePath, O_RDONLY);
-    char fileBuffer[4096] = {0};
-    read(fd, fileBuffer, sizeof(fileBuffer)-1);
-    close(fd);
 
-    char response[8192] = {0};
-    
-    // 首页：返回HTML页面
-    sprintf(response, 
+    char header[1024] = {0};
+    // snprintf：安全函数，指定缓冲区大小，永不溢出
+    snprintf(header, sizeof(header),
         "HTTP/1.1 200 OK\r\n"
         "Content-Type: %s\r\n"
-        "\r\n"
-        "%s",
+        "Content-Length: %ld\r\n"
+        "\r\n",
         getContentType(filePath),
-        fileBuffer
+        fileStat.st_size    // 文件真实大小
     );
-    
-    
-    send(clientfd, response, strlen(response), 0);    // 发送HTTP响应给浏览器
+    send(clientfd, header, strlen(header), 0);    //  先发送响应头
+
+    char fileBuffer[4096] = {0};
+    ssize_t len;
+    while((len = read(fd, fileBuffer, sizeof(fileBuffer))) > 0){
+        send(clientfd, fileBuffer, len, 0);
+    }                     // 循环读取文件 → 循环发送，支持任意大小文件
+    close(fd);
     close(clientfd);      // 短连接：发送完关闭（HTTP/1.1默认短连接）
     
 }
