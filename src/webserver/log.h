@@ -7,7 +7,7 @@
 #include <pthread.h>
 #include "block_queue.h"
 #include "locker.h"
-#include <sys/time.h>
+
 
 class Log{
 public:
@@ -45,7 +45,7 @@ private:
     void* async_write_log(){
         std::string single_log;
         //从阻塞队列中取出一个日志string，写入文件
-        while(!m_stop || !m_log_queue->empty()){
+        while(m_log_queue->pop(single_log)){
             m_mutex.lock();
             fputs(single_log.c_str(), m_fp);
             m_mutex.unlock();

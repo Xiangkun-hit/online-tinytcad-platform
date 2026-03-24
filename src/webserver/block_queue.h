@@ -142,7 +142,7 @@ public:
     // 入参：item 存储出队元素的变量
     // 返回值：true=成功，false=失败（等待被中断）
     // 功能：队列空则无限阻塞，直到被唤醒后出队
-    bool poo(T& item)
+    bool pop(T& item)
     {
         m_mutex.lock();
         // 循环等待：避免C++条件变量的「虚假唤醒」
