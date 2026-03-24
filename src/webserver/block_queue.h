@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <stdlib.h>
+#include <sys/time.h>
 
 #include "locker.h"
 #include "cond.h"
@@ -151,7 +152,7 @@ public:
             //     m_mutex.unlock();
             //     return false;
             // }
-            m_cond.wait(m_mutex);
+            m_cond.wait(m_mutex.get());
         }
         // 循环数组：队首指针后移（取模实现循环）
         m_front = (m_front + 1) % m_max_size;
@@ -172,7 +173,7 @@ public:
         struct timeval now = {0,0};
         gettimeofday(&now, NULL);// 获取当前系统时间
         m_mutex.lock();
-        if(m.size <= 0){
+        if(m_size <= 0){
             // 计算超时时间点：当前时间 + 超时毫秒数
             t.tv_sec = now.tv_sec + ms_timeout / 1000;
             t.tv_nsec = (ms_timeout % 1000) * 1000;
