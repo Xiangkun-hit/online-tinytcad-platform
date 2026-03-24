@@ -4,6 +4,8 @@
 CMakeFiles/web_tinytcad_service.dir/src/webserver/http_parser.cpp.o: ../src/webserver/http_parser.cpp
 CMakeFiles/web_tinytcad_service.dir/src/webserver/http_parser.cpp.o: ../src/webserver/http_parser.h
 
+CMakeFiles/web_tinytcad_service.dir/src/webserver/log.cpp.o: ../src/webserver/log.cpp
+
 CMakeFiles/web_tinytcad_service.dir/src/webserver/main.cpp.o: ../src/webserver/main.cpp
 CMakeFiles/web_tinytcad_service.dir/src/webserver/main.cpp.o: ../src/webserver/server.h
 CMakeFiles/web_tinytcad_service.dir/src/webserver/main.cpp.o: ../src/webserver/threadpool.h

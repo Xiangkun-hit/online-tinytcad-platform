@@ -1,5 +1,6 @@
 file(REMOVE_RECURSE
   "CMakeFiles/web_tinytcad_service.dir/src/webserver/http_parser.cpp.o"
+  "CMakeFiles/web_tinytcad_service.dir/src/webserver/log.cpp.o"
   "CMakeFiles/web_tinytcad_service.dir/src/webserver/main.cpp.o"
   "CMakeFiles/web_tinytcad_service.dir/src/webserver/server.cpp.o"
   "CMakeFiles/web_tinytcad_service.dir/src/webserver/threadpool.cpp.o"

@@ -5,6 +5,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
   "/home/ubuntu/Desktop/online-tinytcad-platform/src/webserver/http_parser.cpp" "/home/ubuntu/Desktop/online-tinytcad-platform/build/CMakeFiles/web_tinytcad_service.dir/src/webserver/http_parser.cpp.o"
+  "/home/ubuntu/Desktop/online-tinytcad-platform/src/webserver/log.cpp" "/home/ubuntu/Desktop/online-tinytcad-platform/build/CMakeFiles/web_tinytcad_service.dir/src/webserver/log.cpp.o"
   "/home/ubuntu/Desktop/online-tinytcad-platform/src/webserver/main.cpp" "/home/ubuntu/Desktop/online-tinytcad-platform/build/CMakeFiles/web_tinytcad_service.dir/src/webserver/main.cpp.o"
   "/home/ubuntu/Desktop/online-tinytcad-platform/src/webserver/server.cpp" "/home/ubuntu/Desktop/online-tinytcad-platform/build/CMakeFiles/web_tinytcad_service.dir/src/webserver/server.cpp.o"
   "/home/ubuntu/Desktop/online-tinytcad-platform/src/webserver/threadpool.cpp" "/home/ubuntu/Desktop/online-tinytcad-platform/build/CMakeFiles/web_tinytcad_service.dir/src/webserver/threadpool.cpp.o"

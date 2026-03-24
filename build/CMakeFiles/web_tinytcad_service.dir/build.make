@@ -70,9 +70,22 @@ CMakeFiles/web_tinytcad_service.dir/src/webserver/http_parser.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/web_tinytcad_service.dir/src/webserver/http_parser.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/ubuntu/Desktop/online-tinytcad-platform/src/webserver/http_parser.cpp -o CMakeFiles/web_tinytcad_service.dir/src/webserver/http_parser.cpp.s
 
+CMakeFiles/web_tinytcad_service.dir/src/webserver/log.cpp.o: CMakeFiles/web_tinytcad_service.dir/flags.make
+CMakeFiles/web_tinytcad_service.dir/src/webserver/log.cpp.o: ../src/webserver/log.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ubuntu/Desktop/online-tinytcad-platform/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/web_tinytcad_service.dir/src/webserver/log.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/web_tinytcad_service.dir/src/webserver/log.cpp.o -c /home/ubuntu/Desktop/online-tinytcad-platform/src/webserver/log.cpp
+
+CMakeFiles/web_tinytcad_service.dir/src/webserver/log.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/web_tinytcad_service.dir/src/webserver/log.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/ubuntu/Desktop/online-tinytcad-platform/src/webserver/log.cpp > CMakeFiles/web_tinytcad_service.dir/src/webserver/log.cpp.i
+
+CMakeFiles/web_tinytcad_service.dir/src/webserver/log.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/web_tinytcad_service.dir/src/webserver/log.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/ubuntu/Desktop/online-tinytcad-platform/src/webserver/log.cpp -o CMakeFiles/web_tinytcad_service.dir/src/webserver/log.cpp.s
+
 CMakeFiles/web_tinytcad_service.dir/src/webserver/main.cpp.o: CMakeFiles/web_tinytcad_service.dir/flags.make
 CMakeFiles/web_tinytcad_service.dir/src/webserver/main.cpp.o: ../src/webserver/main.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ubuntu/Desktop/online-tinytcad-platform/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/web_tinytcad_service.dir/src/webserver/main.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ubuntu/Desktop/online-tinytcad-platform/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/web_tinytcad_service.dir/src/webserver/main.cpp.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/web_tinytcad_service.dir/src/webserver/main.cpp.o -c /home/ubuntu/Desktop/online-tinytcad-platform/src/webserver/main.cpp
 
 CMakeFiles/web_tinytcad_service.dir/src/webserver/main.cpp.i: cmake_force
@@ -85,7 +98,7 @@ CMakeFiles/web_tinytcad_service.dir/src/webserver/main.cpp.s: cmake_force
 
 CMakeFiles/web_tinytcad_service.dir/src/webserver/server.cpp.o: CMakeFiles/web_tinytcad_service.dir/flags.make
 CMakeFiles/web_tinytcad_service.dir/src/webserver/server.cpp.o: ../src/webserver/server.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ubuntu/Desktop/online-tinytcad-platform/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/web_tinytcad_service.dir/src/webserver/server.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ubuntu/Desktop/online-tinytcad-platform/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/web_tinytcad_service.dir/src/webserver/server.cpp.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/web_tinytcad_service.dir/src/webserver/server.cpp.o -c /home/ubuntu/Desktop/online-tinytcad-platform/src/webserver/server.cpp
 
 CMakeFiles/web_tinytcad_service.dir/src/webserver/server.cpp.i: cmake_force
@@ -98,7 +111,7 @@ CMakeFiles/web_tinytcad_service.dir/src/webserver/server.cpp.s: cmake_force
 
 CMakeFiles/web_tinytcad_service.dir/src/webserver/threadpool.cpp.o: CMakeFiles/web_tinytcad_service.dir/flags.make
 CMakeFiles/web_tinytcad_service.dir/src/webserver/threadpool.cpp.o: ../src/webserver/threadpool.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ubuntu/Desktop/online-tinytcad-platform/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/web_tinytcad_service.dir/src/webserver/threadpool.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ubuntu/Desktop/online-tinytcad-platform/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/web_tinytcad_service.dir/src/webserver/threadpool.cpp.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/web_tinytcad_service.dir/src/webserver/threadpool.cpp.o -c /home/ubuntu/Desktop/online-tinytcad-platform/src/webserver/threadpool.cpp
 
 CMakeFiles/web_tinytcad_service.dir/src/webserver/threadpool.cpp.i: cmake_force
@@ -112,6 +125,7 @@ CMakeFiles/web_tinytcad_service.dir/src/webserver/threadpool.cpp.s: cmake_force
 # Object files for target web_tinytcad_service
 web_tinytcad_service_OBJECTS = \
 "CMakeFiles/web_tinytcad_service.dir/src/webserver/http_parser.cpp.o" \
+"CMakeFiles/web_tinytcad_service.dir/src/webserver/log.cpp.o" \
 "CMakeFiles/web_tinytcad_service.dir/src/webserver/main.cpp.o" \
 "CMakeFiles/web_tinytcad_service.dir/src/webserver/server.cpp.o" \
 "CMakeFiles/web_tinytcad_service.dir/src/webserver/threadpool.cpp.o"
@@ -120,12 +134,13 @@ web_tinytcad_service_OBJECTS = \
 web_tinytcad_service_EXTERNAL_OBJECTS =
 
 web_tinytcad_service: CMakeFiles/web_tinytcad_service.dir/src/webserver/http_parser.cpp.o
+web_tinytcad_service: CMakeFiles/web_tinytcad_service.dir/src/webserver/log.cpp.o
 web_tinytcad_service: CMakeFiles/web_tinytcad_service.dir/src/webserver/main.cpp.o
 web_tinytcad_service: CMakeFiles/web_tinytcad_service.dir/src/webserver/server.cpp.o
 web_tinytcad_service: CMakeFiles/web_tinytcad_service.dir/src/webserver/threadpool.cpp.o
 web_tinytcad_service: CMakeFiles/web_tinytcad_service.dir/build.make
 web_tinytcad_service: CMakeFiles/web_tinytcad_service.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/ubuntu/Desktop/online-tinytcad-platform/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Linking CXX executable web_tinytcad_service"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/ubuntu/Desktop/online-tinytcad-platform/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Linking CXX executable web_tinytcad_service"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/web_tinytcad_service.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
