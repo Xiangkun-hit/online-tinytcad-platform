@@ -15,13 +15,13 @@ class block_queue{
 public:
     // 构造函数：初始化队列最大容量
     // 入参：max_size 队列最大元素个数，默认1000
-    block_queue(int max_szie = 1000)
+    block_queue(int max_size = 1000)
     {
-        if(max_szie <= 0){    //容量校验
+        if(max_size <= 0){    //容量校验
             exit(-1);
         }
         m_max_size = max_size;
-        m_array = new T[max_szie];      // 初始化循环数组，存储队列元素
+        m_array = new T[max_size];      // 初始化循环数组，存储队列元素
         m_size = 0;                     // 当前队列元素个数，初始0
         m_front = -1;                   // 队首指针，初始-1（无元素）
         m_back = -1;                    // 队尾指针，初始-1（无元素）
@@ -111,7 +111,7 @@ public:
     int max_size()
     {
         m_mutex.lock();
-        int tmp = max_size;
+        int tmp = m_max_size;
         m_mutex.unlock();
         return tmp;
     }
