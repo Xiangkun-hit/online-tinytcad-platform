@@ -1,6 +1,7 @@
 #include "http_parser.h"
 #include <cstring>
 #include <cstdlib>
+#include "log.h"
 
 // 从状态机--------从缓冲区读取一行（HTTP标准 \r\n 换行）
 LINE_STATUS parse_line(char* buffer, int& checked_idx, int& read_idx){
@@ -22,12 +23,18 @@ LINE_STATUS parse_line(char* buffer, int& checked_idx, int& read_idx){
 // 解析请求行 METHOD url
 HTTP_CODE parse_request_line(char* line, CHECK_STATE& state, HttpRequest& req){
     char* method = strpbrk(line, " \t");
-    if(!method) return HTTP_CODE::BAD_REQUEST;
+    if(!method) {
+        LOG_ERROR("HTTP请求行解析失败:未找到方法与URL的分隔符(请求行：%s)", line);
+        return HTTP_CODE::BAD_REQUEST;
+    }
     *method = '\0';
     method++;
 
     char* url = strpbrk(method, " \t");
-    if(!url) return HTTP_CODE::BAD_REQUEST;
+    if(!url) {
+        LOG_ERROR("HTTP请求行解析失败:未找到URL与版本的分隔符(请求行：%s)", line);
+        return HTTP_CODE::BAD_REQUEST;
+    }
     *url = '\0';
     url++;
 
@@ -55,7 +62,10 @@ HTTP_CODE parse_headers(char* line, CHECK_STATE& state, HttpRequest& req){
 
 // 解析请求体
 HTTP_CODE parse_content(char* buffer, int& checked_idx, int read_idx, HttpRequest& req){
-    if(checked_idx + req.content_len > read_idx + 1) return HTTP_CODE::NO_REQUEST;
+    if(checked_idx + req.content_len > read_idx + 1) {
+        LOG_WARN("HTTP请求体解析失败:请求体不完整（预期：%d字节,实际：%d字节)",req.content_len,read_idx-checked_idx);
+        return HTTP_CODE::NO_REQUEST;
+    }
     req.body = buffer + checked_idx;
     checked_idx += req.content_len;
     return HTTP_CODE::POST_REQUEST;

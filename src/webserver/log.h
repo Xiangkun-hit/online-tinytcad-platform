@@ -65,6 +65,7 @@ private:
     block_queue<std::string>* m_log_queue;   //阻塞队列
     bool m_is_async;                         //是否同步标志位
     locker m_mutex;
+public:
     int m_close_log;        //关闭日志
 };
 

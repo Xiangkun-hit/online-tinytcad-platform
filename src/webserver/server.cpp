@@ -3,6 +3,7 @@
 #include <sys/stat.h>
 #include <signal.h>
 #include "http_parser.h"
+#include "log.h"
 
 
 
@@ -170,11 +171,16 @@ const char* getContentType(const char* path){
 }
 
 bool saveTclFile(const char* content){
+    LOG_DEBUG("开始保存TCL文件到 ../src/tinytcad/input/simulation.tcl");
     int fd = open("../src/tinytcad/input/simulation.tcl", O_WRONLY | O_CREAT | O_TRUNC, 0644);
-    if(fd < 0) return false;
-
+    if(fd < 0) {
+        // 错误日志：文件打开失败（记录errno，便于排查）
+        LOG_ERROR("TCL文件打开失败!路径:../src/tinytcad/input/simulation.tcl,errno:%d", errno);
+        return false;
+    }
     write(fd, content, strlen(content));
     close(fd);
+    LOG_INFO("TCL文件保存成功!大小:%lu字节,路径：../src/tinytcad/input/simulation.tcl", strlen(content));
     return true;
 }
 
@@ -191,18 +197,36 @@ void parseTclParams(const char* content, char* temp, char* dose, char* time){
 
 // 静态业务处理函数（无对象依赖，线程池安全调用）
 void Server::handleClient(int clientfd){
+    // 连接建立日志（DEBUG级别：调试细节）
+    LOG_DEBUG("📞 客户端连接建立,clientfd:%d", clientfd);
     signal(SIGPIPE, SIG_IGN);
     char buffer[1024] = {0};       //存放从客户端读取的数据
     int readn = recv(clientfd, buffer, sizeof(buffer)-1,0);                     //每次调用recv()的返回值
         
     if(readn <= 0){
+        // 警告日志：数据读取失败（客户端断开/超时）
+        LOG_WARN("❌ 客户端[%d]数据读取失败,n:%d,errno:%d,连接关闭", clientfd, readn, errno);
         close(clientfd);
         return;
     }
+    LOG_DEBUG("✅ 客户端[%d]读取到数据，长度：%d字节", clientfd, readn);
 
     //有限状态机解析HTTP请求
     HttpRequest req;
     HTTP_CODE code = http_parse(buffer, readn, req);
+    if (code == HTTP_CODE::BAD_REQUEST) {
+        // 错误日志：HTTP解析失败
+        LOG_ERROR("❌ 客户端[%d]HTTP请求解析失败,请求格式错误", clientfd);
+        char response[1024] = {0};
+        snprintf(response, sizeof(response),
+            "HTTP/1.1 400 Bad Request\r\nContent-Type: text/html; charset=utf-8\r\n\r\n<h1>请求格式错误</h1>");
+        send(clientfd, response, strlen(response), 0);
+        close(clientfd);
+        LOG_DEBUG("客户端[%d]因解析错误，连接已关闭", clientfd);
+        return;
+    }
+    LOG_DEBUG("✅ 客户端[%d]HTTP解析成功,方法：%s,路径：%s,请求体大小：%d字节", 
+              clientfd, req.method.c_str(), req.url.c_str(), req.content_len);
 
     
     // char method[16] = {0};  // 请求方法 GET/POST
@@ -212,6 +236,8 @@ void Server::handleClient(int clientfd){
     //=======动态路由
     char response[8192] = {0};
     if(code == HTTP_CODE::GET_REQUEST && req.url == "/"){
+        // 调试日志：客户端请求上传首页
+        LOG_DEBUG("客户端[%d]请求TCAD上传首页", clientfd);
         // TCL 文件上传表单页面
         snprintf(response, sizeof(response), 
             "HTTP/1.1 200 OK\r\n"
@@ -226,6 +252,8 @@ void Server::handleClient(int clientfd){
             "</form>");
     }
     else if(code == HTTP_CODE::POST_REQUEST && req.url == "/upload"){
+        // 信息日志：客户端开始上传TCL文件
+        LOG_INFO("📤 客户端[%d]发起TCL文件上传请求,请求体大小：%d字节", clientfd, req.content_len);
         saveTclFile(req.body.c_str());
         snprintf(response, sizeof(response),
             "HTTP/1.1 200 OK\r\n"
@@ -235,12 +263,16 @@ void Server::handleClient(int clientfd){
             "<p><a href='/'>继续上传</a></p>");    
     }
     else{
+        // 警告日志：请求路径不存在（404）
+        LOG_WARN("⚠️  客户端[%d]请求不存在的路径：%s,返回404", clientfd, req.url.c_str());
         snprintf(response, sizeof(response),
             "HTTP/1.1 404 Not Found\r\nContent-Type: text/html; charset=utf-8\r\n\r\n"
             "<h1>404 页面不存在</h1>");    
     }
     send(clientfd, response, strlen(response), 0);
+    LOG_DEBUG("✅ 客户端[%d]响应发送成功，长度：%lu字节", clientfd, strlen(response));
     close(clientfd);
+    LOG_DEBUG("🔌 客户端[%d]连接关闭，请求处理流程结束", clientfd);
     
     /* if(strcmp(path, "/") == 0){
         

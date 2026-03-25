@@ -1,0 +1,121 @@
+2026-03-24 19:24:37.212485 [INFO] ✅ TCAD WebServer 日志模块初始化成功（异步模式）
+2026-03-24 19:24:37.212514 [INFO] TCAD输入目录不存在,已自动创建：./tcad/input
+2026-03-24 19:24:37.212569 [INFO] TCAD输出目录不存在,已自动创建：./tcad/output
+2026-03-24 19:24:37.212573 [INFO] ✅ TCAD目录初始化完成:./tcad/input(上传脚本）、./tcad/output(仿真结果)
+2026-03-24 19:24:42.809296 [DEBUG] 📞 客户端连接建立,clientfd:6
+2026-03-24 19:24:42.809520 [DEBUG] ✅ 客户端[6]读取到数据，长度：491字节
+2026-03-24 19:24:42.809548 [DEBUG] ✅ 客户端[6]HTTP解析成功,方法：Host:,路径：Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:136.0) Gecko/20100101 Firefox/136.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2
+Accept-Encoding: gzip, deflate, br, zstd
+Connection: keep-alive
+Upgrade-Insecure-Requests: 1
+Sec-Fetch-Dest: document
+Sec-Fetch-Mode: navigate
+Sec-Fetch-Site: none
+Sec-Fetch-User: ?1
+Priority: u=0, i
+
+,请求体大小：0字节
+2026-03-24 19:24:42.809562 [WARN] ⚠️  客户端[6]请求不存在的路径：Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:136.0) Gecko/20100101 Firefox/136.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2
+Accept-Encoding: gzip, deflate, br, zstd
+Connection: keep-alive
+Upgrade-Insecure-Requests: 1
+Sec-Fetch-Dest: document
+Sec-Fetch-Mode: navigate
+Sec-Fetch-Site: none
+Sec-Fetch-User: ?1
+Priority: u=0, i
+
+,返回404
+2026-03-24 19:24:42.809613 [DEBUG] ✅ 客户端[6]响应发送成功，长度：94字节
+2026-03-24 19:24:42.809640 [DEBUG] 🔌 客户端[6]连接关闭，请求处理流程结束
+2026-03-24 19:24:42.861460 [DEBUG] 📞 客户端连接建立,clientfd:6
+2026-03-24 19:24:42.861518 [DEBUG] ✅ 客户端[6]读取到数据，长度：491字节
+2026-03-24 19:24:42.861529 [DEBUG] ✅ 客户端[6]HTTP解析成功,方法：Host:,路径：Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:136.0) Gecko/20100101 Firefox/136.0
+Accept: image/avif,image/webp,image/png,image/svg+xml,image/*;q=0.8,*/*;q=0.5
+Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2
+Accept-Encoding: gzip, deflate, br, zstd
+Connection: keep-alive
+Referer: http://127.0.0.1:8080/
+Sec-Fetch-Dest: image
+Sec-Fetch-Mode: no-cors
+Sec-Fetch-Site: same-origin
+Priority: u=6
+
+,请求体大小：0字节
+2026-03-24 19:24:42.861532 [WARN] ⚠️  客户端[6]请求不存在的路径：Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:136.0) Gecko/20100101 Firefox/136.0
+Accept: image/avif,image/webp,image/png,image/svg+xml,image/*;q=0.8,*/*;q=0.5
+Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2
+Accept-Encoding: gzip, deflate, br, zstd
+Connection: keep-alive
+Referer: http://127.0.0.1:8080/
+Sec-Fetch-Dest: image
+Sec-Fetch-Mode: no-cors
+Sec-Fetch-Site: same-origin
+Priority: u=6
+
+,返回404
+2026-03-24 19:24:42.861545 [DEBUG] ✅ 客户端[6]响应发送成功，长度：94字节
+2026-03-24 19:24:42.861556 [DEBUG] 🔌 客户端[6]连接关闭，请求处理流程结束
+2026-03-24 19:24:46.564098 [DEBUG] 📞 客户端连接建立,clientfd:6
+2026-03-24 19:24:46.564218 [DEBUG] ✅ 客户端[6]读取到数据，长度：491字节
+2026-03-24 19:24:46.564600 [DEBUG] ✅ 客户端[6]HTTP解析成功,方法：Host:,路径：Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:136.0) Gecko/20100101 Firefox/136.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2
+Accept-Encoding: gzip, deflate, br, zstd
+Connection: keep-alive
+Upgrade-Insecure-Requests: 1
+Sec-Fetch-Dest: document
+Sec-Fetch-Mode: navigate
+Sec-Fetch-Site: none
+Sec-Fetch-User: ?1
+Priority: u=0, i
+
+,请求体大小：0字节
+2026-03-24 19:24:46.564622 [WARN] ⚠️  客户端[6]请求不存在的路径：Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:136.0) Gecko/20100101 Firefox/136.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2
+Accept-Encoding: gzip, deflate, br, zstd
+Connection: keep-alive
+Upgrade-Insecure-Requests: 1
+Sec-Fetch-Dest: document
+Sec-Fetch-Mode: navigate
+Sec-Fetch-Site: none
+Sec-Fetch-User: ?1
+Priority: u=0, i
+
+,返回404
+2026-03-24 19:24:46.564685 [DEBUG] ✅ 客户端[6]响应发送成功，长度：94字节
+2026-03-24 19:24:46.564725 [DEBUG] 🔌 客户端[6]连接关闭，请求处理流程结束
+2026-03-24 19:24:59.847620 [DEBUG] 📞 客户端连接建立,clientfd:6
+2026-03-24 19:24:59.847691 [DEBUG] ✅ 客户端[6]读取到数据，长度：491字节
+2026-03-24 19:24:59.847703 [DEBUG] ✅ 客户端[6]HTTP解析成功,方法：Host:,路径：Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:136.0) Gecko/20100101 Firefox/136.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2
+Accept-Encoding: gzip, deflate, br, zstd
+Connection: keep-alive
+Upgrade-Insecure-Requests: 1
+Sec-Fetch-Dest: document
+Sec-Fetch-Mode: navigate
+Sec-Fetch-Site: none
+Sec-Fetch-User: ?1
+Priority: u=0, i
+
+,请求体大小：0字节
+2026-03-24 19:24:59.847708 [WARN] ⚠️  客户端[6]请求不存在的路径：Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:136.0) Gecko/20100101 Firefox/136.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2
+Accept-Encoding: gzip, deflate, br, zstd
+Connection: keep-alive
+Upgrade-Insecure-Requests: 1
+Sec-Fetch-Dest: document
+Sec-Fetch-Mode: navigate
+Sec-Fetch-Site: none
+Sec-Fetch-User: ?1
+Priority: u=0, i
+
+,返回404
+2026-03-24 19:24:59.847715 [DEBUG] ✅ 客户端[6]响应发送成功，长度：94字节
