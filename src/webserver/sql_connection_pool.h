@@ -8,6 +8,7 @@
 
 #include "locker.h"
 #include "log.h"
+#include "sem.h"
 
 class connection_pool{
 public:
@@ -37,9 +38,9 @@ private:
     int m_MaxConn;  // 连接池最大连接数（由init的MaxConn参数初始化）
 	int m_CurConn;  // 当前已被使用的连接数（每次GetConnection+1，ReleaseConnection-1）
 	int m_FreeConn; // 当前空闲的连接数（每次GetConnection-1，ReleaseConnection+1）
-	locker lock;    // 互斥锁（保护connList的线程安全，避免多线程同时修改连接池容器）
+	locker m_lock;    // 互斥锁（保护connList的线程安全，避免多线程同时修改连接池容器）
 	std::list<MYSQL *> connList; // 连接池容器（存储所有MySQL连接的指针，链表便于快速增删）
-	// sem reserve;    // 信号量（控制并发获取连接的数量，初始值为最大空闲连接数，保证不超量获取）
+	sem reserve;    // 信号量（控制并发获取连接的数量，初始值为最大空闲连接数，保证不超量获取）
 
 public:
     //公有成员变量（连接池配置参数）
