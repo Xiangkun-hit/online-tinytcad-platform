@@ -80,9 +80,10 @@ HTTP_CODE http_parse(char* buffer, int read_idx, HttpRequest& req){
     LINE_STATUS line_status = LINE_STATUS::LINE_OK;              //行状态初始为完整
     HTTP_CODE ret = HTTP_CODE::NO_REQUEST;                       //解析结果
     int checked_idx = 0;                                         //已经解析到的缓冲区位置
+    int start_idx = 0;
 
     while((line_status = parse_line(buffer, checked_idx, read_idx)) == LINE_STATUS::LINE_OK){
-        char* line = buffer + checked_idx;              // 拿到当前完整的一行
+        char* line = buffer + start_idx;              // 拿到当前完整的一行
 
         switch(state){                      // 按当前状态处理这一行
             case CHECK_STATE::CHECK_STATE_REQUEST_LINE:
@@ -95,6 +96,7 @@ HTTP_CODE http_parse(char* buffer, int read_idx, HttpRequest& req){
                 break;   
         }
         if(ret == HTTP_CODE::BAD_REQUEST) return HTTP_CODE::BAD_REQUEST;
+        start_idx = checked_idx;
     }
     if(line_status == LINE_STATUS::LINE_OPEN && state == CHECK_STATE::CHECK_STATE_CONTENT){
         ret = parse_content(buffer, checked_idx, read_idx, req);
