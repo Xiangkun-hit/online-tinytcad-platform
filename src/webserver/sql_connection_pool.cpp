@@ -101,3 +101,14 @@ void connection_pool::DestroyPool(){                     //销毁所有连接
 connection_pool::~connection_pool(){
     DestroyPool();
 }
+
+connectionRAII::connectionRAII(MYSQL** con, connection_pool* connPool){
+    *con = connPool->Getconnection();
+
+    conRAII = *con;
+    poolRAII = connPool;
+}
+
+connectionRAII::~connectionRAII(){
+    poolRAII->ReleaseConnection(conRAII);
+}
