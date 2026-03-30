@@ -3,6 +3,7 @@
 #include "log.h"
 #include <sys/types.h>
 #include <sys/stat.h>
+#include "sql_connection_pool.h"
 
 int main(){
     // ==========日志初始化
